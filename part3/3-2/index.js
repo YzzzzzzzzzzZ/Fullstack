@@ -3,7 +3,7 @@ const app = express()
 
 app.use(express.json())
 
-const persons = [
+let persons = [
   {
     id: 1,
     name: 'Yang',
@@ -25,6 +25,12 @@ const persons = [
     number: '13800138000',
   },
 ]
+
+const randomId = () => {
+  const id = Math.floor(Math.random() * 10000000)
+
+  return id
+}
 
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
@@ -63,6 +69,36 @@ app.delete('/api/persons/:id', (req, res) => {
     return res.status(404).send('<p>not found</p>')
   }
   res.json(persons)
+})
+
+app.post('/api/persons', (req, res) => {
+  const body = req.body
+
+  if (!body.name || !body.number) {
+    return res.status(400).json({
+      error: 'name and number are required',
+    })
+  }
+
+  const result = persons.find((row) => {
+    return row.name === body.name
+  })
+
+  if (result) {
+    return res.status(400).json({
+      error: body.name + ' already exist'
+    })
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: randomId(),
+  }
+
+  persons = persons.concat(person)
+
+  res.json(person)
 })
 
 const PORT = 3001
