@@ -3,7 +3,7 @@ import React from 'react'
 const Part = (props) => {
   const { id, name, exercises } = props
   return (
-    <li key={id}>
+    <li>
       {name}:{exercises}
     </li>
   )
@@ -19,7 +19,7 @@ const Course = ({ course }) => {
       <h3>{course.name}</h3>
       <ul>
         {course.parts.map((row) => {
-          return <Part key={row.id} id={row.id} name={row.name} exercises={row.exercises} />
+          return <Part key={row.id} name={row.name} exercises={row.exercises} />
         })}
       </ul>
       <p>Total:{total}</p>
