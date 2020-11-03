@@ -1,12 +1,17 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
+const cors = require('cors')
+const Person = require('./models/person')
 
+app.use(cors())
 app.use(express.json())
+app.use(express.static('build'))
 
 const morgan = require('morgan')
 
 app.use(
-  morgan(function(tokens, req, res) {
+  morgan(function (tokens, req, res) {
     return [
       tokens.method(req, res),
       tokens.url(req, res),
@@ -15,64 +20,51 @@ app.use(
       '-',
       tokens['response-time'](req, res),
       'ms',
-      JSON.stringify(req.body)
+      JSON.stringify({ body: req.body, params: req.params }),
     ].join(' ')
   })
 )
 
-let persons = [
-  {
-    id: 1,
-    name: 'Yang',
-    number: '13800138000',
-  },
-  {
-    id: 2,
-    name: 'Ze',
-    number: '13800138000',
-  },
-  {
-    id: 3,
-    name: 'He',
-    number: '13800138000',
-  },
-  {
-    id: 4,
-    name: 'Wiil',
-    number: '13800138000',
-  },
-]
-
-const randomId = () => {
-  const id = Math.floor(Math.random() * 10000000)
-
-  return id
-}
-
-app.get('/', (req, res) => {
-  res.send('<h1>Hello World!</h1>')
-})
-
-app.get('/info', (req, res) => {
-  res.send(`
-    <p>当前电话簿共 ${persons.length} 条</p>
-    <p>${new Date().toDateString()}</p>
-  `)
-})
-
 app.get('/api/persons', (req, res) => {
-  res.json(persons)
+  Person.find({}).then((r) => {
+    res.json(r)
+  })
 })
 
 app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  const person = persons.find((row) => {
-    return row.id === id
-  })
-  if (!person) {
-    return res.status(404).send('<p>not found</p>')
+  const id = req.params.id
+
+  Person.findById(id)
+    .then((r) => {
+      if (r) {
+        res.json(r)
+      } else {
+        res.status(404).end()
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(404).end()
+    })
+})
+
+app.post('/api/persons', (req, res) => {
+  const body = req.body
+
+  if (!body.name || !body.number) {
+    return res.status(400).json({
+      error: 'name and number are required',
+    })
   }
-  res.json(person)
+
+  const person = new Person({
+    name: body.name,
+    number: body.number,
+  })
+
+  person.save().then((r) => {
+    res.json(r)
+  })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
@@ -88,7 +80,7 @@ app.delete('/api/persons/:id', (req, res) => {
   res.json(persons)
 })
 
-app.post('/api/persons', (req, res) => {
+app.put('/api/persons/:id', (req, res) => {
   const body = req.body
 
   if (!body.name || !body.number) {
@@ -97,23 +89,13 @@ app.post('/api/persons', (req, res) => {
     })
   }
 
-  const result = persons.find((row) => {
-    return row.name === body.name
-  })
-
-  if (result) {
-    return res.status(400).json({
-      error: body.name + ' already exist',
-    })
-  }
-
   const person = {
     name: body.name,
     number: body.number,
-    id: randomId(),
+    id: body.id,
   }
 
-  persons = persons.concat(person)
+  persons = persons.map((row) => (row.id === person.id ? person : row))
 
   res.json(person)
 })
@@ -124,7 +106,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)
 })
