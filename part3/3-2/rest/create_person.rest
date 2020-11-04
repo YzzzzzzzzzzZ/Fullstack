@@ -5,3 +5,12 @@ Content-Type: application/json
   "name": "Json",
   "number": "13800138000"
 }
+
+###
+PUT http://localhost:3001/api/persons/5fa12ae4710e214db3b0e93f HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Json",
+  "number": "13800138000"
+}

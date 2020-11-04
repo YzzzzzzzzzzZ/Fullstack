@@ -13,15 +13,15 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
 
   useEffect(() => {
-    getPerson().then((data) => {
-      setPersons(data)
-      setSearch(data)
-    })
+    getPerson()
+      .then((data) => {
+        setPersons(data)
+        setSearch(data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }, [])
-
-  // useEffect(() => {
-  //   setSearch([...persons])
-  // }, [persons])
 
   const handleClick = (e) => {
     e.preventDefault()
@@ -40,16 +40,24 @@ const App = () => {
     if (row) {
       if (window.confirm(newName + ' 已存在。继续上传会更改number。')) {
         person = { ...row, ...person }
-        updatePerson(person).then((r) => {
-          setSearch(persons.map((item) => (item.id === row.id ? r : item)))
-          setPersons(persons.map((item) => (item.id === row.id ? r : item)))
-        })
+        updatePerson(person)
+          .then((r) => {
+            setSearch(persons.map((item) => (item.id === row.id ? r : item)))
+            setPersons(persons.map((item) => (item.id === row.id ? r : item)))
+          })
+          .catch((err) => {
+            console.log(err)
+          })
       }
     } else {
-      createPerson(person).then((r) => {
-        setSearch(persons.concat(r))
-        setPersons(persons.concat(r))
-      })
+      createPerson(person)
+        .then((r) => {
+          setSearch(persons.concat(r))
+          setPersons(persons.concat(r))
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   }
 
@@ -66,13 +74,17 @@ const App = () => {
 
   const handleRemove = (id) => {
     if (window.confirm('确认删除吗？')) {
-      removePerson(id).then((r) => {
-        const i = persons.findIndex((row) => {
-          return row.id === id
+      removePerson(id)
+        .then((r) => {
+          const i = persons.findIndex((row) => {
+            return row.id === id
+          })
+          setPersons(persons.slice(0, i).concat(persons.slice(i + 1)))
+          setSearch(persons.slice(0, i).concat(persons.slice(i + 1)))
         })
-        setPersons(persons.slice(0, i).concat(persons.slice(i + 1)))
-        setSearch(persons.slice(0, i).concat(persons.slice(i + 1)))
-      })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   }
 
