@@ -8,5 +8,5 @@ const server = http.createServer(app)
 
 const PORT = config.PORT
 server.listen(PORT, () => {
-  logger.info(`Server running on http://localhost:${PORT}`)
+  logger.info(`\r\n  Server running on http://localhost:${PORT} \r\n`)
 })
