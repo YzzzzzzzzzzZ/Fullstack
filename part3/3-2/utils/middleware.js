@@ -11,6 +11,7 @@ const requestLogger = morgan(function (tokens, req, res) {
     tokens['response-time'](req, res),
     'ms',
     JSON.stringify({ body: req.body, params: req.params }),
+    new Date().toLocaleString(),
   ].join(' ')
 })
 
