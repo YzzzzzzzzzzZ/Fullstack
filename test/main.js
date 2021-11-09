@@ -51,8 +51,8 @@ function formatData(data) {
       arr[i].data.push([
         arr[i].data.length,
         row.uname,
-        row.idcard,
-        row.mobile,
+        row.idcard_de,
+        row.mobile_de,
         row.education,
         row.item,
         row.level_name,
@@ -96,8 +96,8 @@ function formatData(data) {
       obj.data.push([
         obj.data.length,
         row.uname,
-        row.idcard,
-        row.mobile,
+        row.idcard_de,
+        row.mobile_de,
         row.education,
         row.item,
         row.level_name,
