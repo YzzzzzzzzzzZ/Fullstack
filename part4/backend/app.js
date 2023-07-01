@@ -9,6 +9,7 @@ const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
 
 const blogRouter = require('./controllers/blog')
+const noteRouter = require('./controllers/note')
 
 logger.info('connecting to', config.MONGODB_URI)
 
@@ -32,6 +33,7 @@ app.use(express.json())
 app.use(middleware.requestLogger)
 
 app.use('/api/blogs', blogRouter)
+app.use('/api/notes', noteRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

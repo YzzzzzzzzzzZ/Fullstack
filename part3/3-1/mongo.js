@@ -1,15 +1,17 @@
 const mongoose = require('mongoose')
 
-if (process.argv.length < 3) {
-  console.log('Please provide the password as an argument: node mongo.js <password>')
-  process.exit(1)
-}
+// if (process.argv.length < 3) {
+//   console.log('Please provide the password as an argument: node mongo.js <password>')
+//   process.exit(1)
+// }
 
-const password = process.argv[2]
+// mongodb://localhost:27017/
+// mongodb+srv://fullstack:$<password>@cluster0.o1opl.mongodb.net/noteApp?retryWrites=true&w=majority
 
-const url = `mongodb+srv://yang:${password}@cluster0.ftvuc.mongodb.net/phone-note?retryWrites=true`
+const url = `mongodb://localhost:27017/noteApp?retryWrites=true`
 
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
+// mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true }).then(() => {
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
 const noteSchema = new mongoose.Schema({
   content: String,
@@ -19,11 +21,13 @@ const noteSchema = new mongoose.Schema({
 
 const Note = mongoose.model('Note', noteSchema)
 
-// const note = new Note({
-//   content: 'HTML11 is Easy',
-//   date: new Date(),
-//   important: false,
-// })
+const note = new Note({
+  content: 'HTML22 is Easy',
+  date: new Date(),
+  important: true,
+})
+
+// console.log(note);
 
 // note.save().then(result => {
 //   console.log('note saved!')

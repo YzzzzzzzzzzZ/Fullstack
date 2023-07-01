@@ -1,4 +1,4 @@
-@Host = http://localhost:3001
+@Host = http://localhost:3000
 
 GET {{Host}}/api/blogs HTTP/1.1
 
