@@ -8,6 +8,7 @@ const mongoose = require('mongoose')
 const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
 
+const userRouter = require('./controllers/user')
 const blogRouter = require('./controllers/blog')
 const noteRouter = require('./controllers/note')
 
@@ -32,6 +33,7 @@ app.use(express.json())
 
 app.use(middleware.requestLogger)
 
+app.use('/api/user', userRouter)
 app.use('/api/blogs', blogRouter)
 app.use('/api/notes', noteRouter)
 
