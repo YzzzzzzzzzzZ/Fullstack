@@ -18,7 +18,7 @@ const noteSchema = new mongoose.Schema({
 
 noteSchema.set('toJSON', {
   tensform: (document, returnedObject) => {
-    returnedObject.is = returnedObject._id.toString()
+    returnedObject.id = returnedObject._id.toString()
     delete returnedObject._id
     delete returnedObject.__v
   },

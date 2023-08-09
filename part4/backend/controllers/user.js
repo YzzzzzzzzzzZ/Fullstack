@@ -3,7 +3,7 @@ const userRouter = require('express').Router()
 const User = require('../moudels/user')
 
 userRouter.get('/', async (request, response, next) => {
-  const users = await User.find()
+  const users = await User.find({}).populate('notes', { content: 1, date: 1 })
   response.json(users)
 })
 
@@ -12,7 +12,6 @@ userRouter.post('/', async (request, response, next) => {
 
   const exisitingUser = await User.findOne({ username })
   if (exisitingUser) {
-    console.log(1);
     return response.status(400).json({
       error: 'username must be unique',
     })

@@ -1,0 +1,15 @@
+@Host = http://localhost:3000
+
+GET {{Host}}/api/notes HTTP/1.1
+
+###
+
+POST {{Host}}/api/notes HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InlhbmciLCJpZCI6IjY0ZDI2NmMzZmRkNWZlNTE4NDk5MmM3MyIsImlhdCI6MTY5MTU5MjI0NX0.EiyMExfpBBMVsRUJCyJ_MI_zEmDt0BlzUoNr6Z1Ihmg
+
+{
+  "content": "22 User id of the note creator id at the start sent along the request",
+  "important": true,
+  "userId": "64d1ea1294be0638e09a457b"
+}
